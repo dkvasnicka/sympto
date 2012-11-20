@@ -6,14 +6,44 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
 
-         <servlet>
-                  <servlet-name>health</servlet-name>
-                  <jsp-file>/health.jsp</jsp-file>
-         </servlet>
-         <servlet-mapping>
-                  <servlet-name>health</servlet-name>
-                  <url-pattern>/health</url-pattern>
-         </servlet-mapping>
-         
+    <!-- The following parameters may also be passed on as system properties: -->
+
+    <context-param>
+        <param-name>org.basex.restxqpath</param-name>
+        <param-value>WEB-INF/xqm</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.basex.server</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <!-- Login data: by default, no user and password is specified, and the
+        credentials must be passed on by the client. Please check by yourself
+        if it is safe to store your credentials in this file. -->
+    <context-param>
+        <param-name>org.basex.user</param-name>
+        <param-value>admin</param-value>
+    </context-param>
+    <context-param>
+        <param-name>org.basex.password</param-name>
+        <param-value>admin</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.basex.dbpath</param-name>
+        <param-value>/Users/daniel/BaseXData</param-value>
+    </context-param>
+
+    <!--  RESTXQ Service (can be deactivated by removing this entry) -->
+    <servlet>
+        <servlet-name>RESTXQ</servlet-name>
+        <servlet-class>org.basex.http.restxq.RestXqServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RESTXQ</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
 

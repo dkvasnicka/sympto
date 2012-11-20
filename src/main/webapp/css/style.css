@@ -1,0 +1,119 @@
+@CHARSET "UTF-8";
+
+body {
+	padding: 0;
+	margin: 10px;
+	font-family: Lucida Grande, Verdana, sans-serif;
+	font-size: 0.8em;
+	line-height: 150%;
+}
+
+h1 {
+	margin: 10px 0 0 0;
+	padding: 0;
+}
+
+#main {
+	width: 900px;
+	margin: 0 auto;
+}
+
+#toolbar {
+	width: 100%;
+	padding: 5px 0;
+	border-bottom: 1px #ababab solid;
+	text-align: right;
+	margin-top: 0px;
+}
+
+fieldset {
+	padding: 10px;
+	border: 1px #ababab dotted;
+	margin: 5px 0;
+}
+
+legend {
+	padding: 0 5px;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+	margin: 5px 0;
+}
+
+.submitBox {
+	text-align: right;
+}
+
+a {
+	color: #cc0000;
+}
+
+a img {
+	border: none;
+    text-decoration:none;
+}
+
+#socialLogin {
+    margin-top: 20px;
+    text-align: center;    
+}    
+
+#socialLogin a {
+    display: block;
+    margin: 10px;
+}    
+
+
+ul {
+	list-style-type: square;
+}
+
+.radio label {
+	display: inline !important;
+}
+
+#chart {
+	background-image: url("../img/ajax-loader.gif");
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	height: 400px;
+}
+
+#measurement div {
+	float: left;
+	padding: 0 50px;
+}
+
+#dashboardTopControls {
+	text-align: right;
+	width: 100%;
+}
+
+#submitMeasurement {
+	text-align: center;
+	width: 100%;
+	padding: 10px 0 0 0 !important;
+	margin: 10px 0 0 0;
+	border-top: 1px #ababab dotted
+}
+
+.messages {
+	width: 95%;
+	padding: 10px 0 10px 5%;
+}
+
+.msgsError {
+	color: #cc0000;
+}
+
+.msgsInfo {
+	color: #004276;
+}
+
+#measurementFormLoader {
+	width: 20px;
+	height: 20px;
+	margin: 0 0 -5px 20px;
+}

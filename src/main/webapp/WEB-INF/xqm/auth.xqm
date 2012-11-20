@@ -1,0 +1,78 @@
+module namespace page = 'http://basex.org/modules/web-page';
+declare namespace rest = 'http://exquery.org/ns/restxq';
+declare namespace random = 'http://basex.org/modules/random';
+declare namespace http = 'http://expath.org/ns/http-client';
+declare namespace json = 'http://basex.org/modules/json';
+declare namespace s = "http://danielkvasnicka.net/sympto";
+
+import module namespace session = 'http://basex.org/modules/session';
+import module namespace oa = 'http://basex.org/ns/oauth' at "../xqlib/oauth.xqm";
+
+declare variable $page:FB_STATE_HASH_ATTR_NAME := "fbStateHash";
+declare variable $page:FB_TOKEN_ATTR_NAME := "fbToken";
+declare %public variable $page:USER_EMAIL_ATTR_NAME := "userId";
+declare %public variable $page:USER_NAME_ATTR_NAME := "userName";
+
+declare %rest:path("auth/oauth/fb/callback")
+        %restxq:query-param("state", "{$state}")
+        %restxq:query-param("code", "{$code}")   
+        function page:fb-oauth-callback($state as xs:string, $code as xs:string) {
+   
+    if (session:get($page:FB_STATE_HASH_ATTR_NAME) = $state) then
+        let $response := document { http:send-request(
+            <http:request method="get" 
+                href="https://graph.facebook.com/oauth/access_token?client_id=108170726014554&amp;redirect_uri=http://localhost:8080/app/auth/oauth/fb/callback&amp;client_secret=e4f4ee53ef2d35281d304a942403be9f&amp;code={$code}">                
+            </http:request>
+        ) }
+        let $token := fn:substring-before(fn:substring-after($response[1], "access_token="), "&amp;")
+        let $userInfo := json:parse(document { http:send-request(
+            <http:request method="get" 
+                href="https://graph.facebook.com/me?access_token={$token}">                
+            </http:request>
+        ) }[1])
+        let $email := $userInfo/email
+        return
+            (
+                session:set($page:FB_TOKEN_ATTR_NAME, $token),
+                session:set($page:USER_EMAIL_ATTR_NAME, $email),
+                session:set($page:USER_NAME_ATTR_NAME, $userInfo/name),
+                <rest:redirect> {
+                if (db:open('sympto')/s:sympto/s:profile[@id = $email]) then
+                    "/#/dashboard"
+                else
+                    "/#/new-user"
+                } </rest:redirect>
+            )
+    else
+        <rest:redirect>/</rest:redirect>
+};
+
+declare %rest:path("auth/user-name")
+        %output:method("text")
+        function page:user-name() {
+
+    let $userName := session:get($page:USER_NAME_ATTR_NAME)
+    return
+        if (fn:empty($userName)) then
+            <restxq:response>
+                <http:response status="403" message="No user" />
+            </restxq:response>
+        else
+            $userName
+};            
+
+declare %rest:path("auth/logout")
+        function page:logout() {
+
+    (session:close(), <rest:redirect>/</rest:redirect>)
+};  
+
+declare %rest:path("auth/oauth/fb/csrf-state")
+        %output:method("text")
+        function page:fb-csrf-state() {
+    
+    let $state := hash:md5(random:integer() cast as xs:string)
+    return
+        (session:set($page:FB_STATE_HASH_ATTR_NAME, $state cast as xs:string), fn:encode-for-uri($state cast as xs:string))
+    
+};

@@ -1,0 +1,22 @@
+<h2>New user setup</h2>
+
+<form ng-controller="ProfileCtrl">
+    <fieldset>
+        <legend>Profile settings</legend>
+        
+        <label for="tunit">Temp unit</label>
+        <select ng-model="newProfile[1].temp_unit" id="tunit" required>
+            <option value="C">Celsius</option>
+            <option value="F">Farenheit</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <legend>Your first cycle</legend>
+        
+        <label for="cstart">First day of the cycle</label>
+        <input type="text" ng-model="newProfile[2][1].start" id="cstart" required ui-date />
+    </fieldset>
+
+    <button ng-click="initUser()" class="btn btn-primary pull-right">Start!</button>
+</form>

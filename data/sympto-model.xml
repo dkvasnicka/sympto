@@ -1,0 +1,12 @@
+<sympto-model xmlns="http://danielkvasnicka.net/sympto/model">
+    <dictionary>
+        <enum name="vaginal-sensation">
+            <variant>dry</variant>
+            <variant>ignore</variant>
+            <variant>sticky</variant>
+            <variant>humid</variant>
+            <variant>wet</variant>
+            <variant>lubricated</variant>
+        </enum>
+    </dictionary>
+</sympto-model>
