@@ -17,13 +17,17 @@ function AuthCtrl($scope, $http) {
         });   
 }
 
-function ProfileCtrl($scope, $location) {
+function ProfileCtrl($scope, $http, $location) {
     
     $scope.newProfile = ["profile", {},
                             ["cycle", { "start" : new Date() }]]; 
 
     $scope.initUser = function() {
-        $location.path('/dashboard');
+        $http.put('/app/api/users/init', $scope.newProfile, 
+            { headers: {'Content-Type': 'application/jsonml;charset=utf-8'} }).
+            success(function(data) {
+                $location.path('/dashboard');
+            });            
     };
 }
 

@@ -7,11 +7,10 @@ declare namespace s = "http://danielkvasnicka.net/sympto";
 
 import module namespace session = 'http://basex.org/modules/session';
 import module namespace oa = 'http://basex.org/ns/oauth' at "../xqlib/oauth.xqm";
+import module namespace sec = 'http://danielkvasnicka.net/sympto/secure' at "../xqlib/security.xqm";
 
 declare variable $page:FB_STATE_HASH_ATTR_NAME := "fbStateHash";
 declare variable $page:FB_TOKEN_ATTR_NAME := "fbToken";
-declare %public variable $page:USER_EMAIL_ATTR_NAME := "userId";
-declare %public variable $page:USER_NAME_ATTR_NAME := "userName";
 
 declare %rest:path("auth/oauth/fb/callback")
         %restxq:query-param("state", "{$state}")
@@ -34,8 +33,8 @@ declare %rest:path("auth/oauth/fb/callback")
         return
             (
                 session:set($page:FB_TOKEN_ATTR_NAME, $token),
-                session:set($page:USER_EMAIL_ATTR_NAME, $email),
-                session:set($page:USER_NAME_ATTR_NAME, $userInfo/name),
+                session:set($sec:USER_EMAIL_ATTR_NAME, $email),
+                session:set($sec:USER_NAME_ATTR_NAME, $userInfo/name),
                 <rest:redirect> {
                 if (db:open('sympto')/s:sympto/s:profile[@id = $email]) then
                     "/#/dashboard"
@@ -51,7 +50,7 @@ declare %rest:path("auth/user-name")
         %output:method("text")
         function page:user-name() {
 
-    let $userName := session:get($page:USER_NAME_ATTR_NAME)
+    let $userName := session:get($sec:USER_NAME_ATTR_NAME)
     return
         if (fn:empty($userName)) then
             <restxq:response>
