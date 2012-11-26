@@ -8,11 +8,15 @@ declare %public variable $secure:USER_NAME_ATTR_NAME := "userName";
 
 declare function secure:secure($fun) {
     
-    if (fn:empty(secure:get-current-user-id())) then
-        (session:close(), <rest:redirect>/</rest:redirect>)
+    if (secure:is-user-logged-in()) then
+        $fun()
     else
-        $fun()        
+        (session:close(), <rest:redirect>/</rest:redirect>)        
 };
+
+declare function secure:is-user-logged-in() as xs:boolean {
+    fn:not(fn:empty(secure:get-current-user-id()))
+};    
 
 declare function secure:get-current-user-id() {
     session:get($secure:USER_EMAIL_ATTR_NAME)

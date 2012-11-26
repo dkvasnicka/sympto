@@ -46,6 +46,16 @@ declare %rest:path("auth/oauth/fb/callback")
         <rest:redirect>/</rest:redirect>
 };
 
+declare %rest:path("auth/oauth/fb/csrf-state")
+        %output:method("text")
+        function page:fb-csrf-state() {
+    
+    let $state := hash:md5(random:integer() cast as xs:string)
+    return
+        (session:set($page:FB_STATE_HASH_ATTR_NAME, $state cast as xs:string), fn:encode-for-uri($state cast as xs:string))
+    
+};
+
 declare %rest:path("auth/user-name")
         %output:method("text")
         function page:user-name() {
@@ -65,13 +75,3 @@ declare %rest:path("auth/logout")
 
     (session:close(), <rest:redirect>/</rest:redirect>)
 };  
-
-declare %rest:path("auth/oauth/fb/csrf-state")
-        %output:method("text")
-        function page:fb-csrf-state() {
-    
-    let $state := hash:md5(random:integer() cast as xs:string)
-    return
-        (session:set($page:FB_STATE_HASH_ATTR_NAME, $state cast as xs:string), fn:encode-for-uri($state cast as xs:string))
-    
-};

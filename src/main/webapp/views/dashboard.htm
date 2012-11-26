@@ -1,9 +1,92 @@
-<form ng-controller="MeasurementCtrl">
+<h3>Your current cycle</h3>
+
+<div id="chart" style="height:300px"></div>
+
+<form ng-controller="CycleCtrl" class="form-horizontal">
     <fieldset>
         <legend>
-            Measurement
+            Measurement data
         </legend>
+        
+        <div class="row">
+            <div class="span5">
+                <div class="control-group">
+                    <label class="control-label" for="mdate">Date</label>            
+                    <div class="controls">
+                        <input type="text" ng-model="measurement[1].date" id="mdate" class="span2" ui-date required />
+                    </div>
+                </div>
 
-        <input type="text" ng-model="measurement[1].date" />
+                <div class="control-group">
+                    <label class="control-label" for="temp">Temperature</label>            
+                    <div class="controls">
+                        <input type="number" ng-model="measurement[1].temp" id="temp" class="span1" required /> °C
+                    </div>
+                </div>        
+                
+                <div class="control-group">
+                    <div class="controls">            
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="measurement[1].sex" /> Sexual intercourse
+                        </label>        
+                    </div>
+                </div>            
+            </div>
+            <div class="span5">
+                <div class="control-group">
+                    <label class="control-label" for="vsens">Vaginal sens.</label>            
+                    <div class="controls">
+                        <select ng-model="measurement[2][2]" id="vsens">
+                            <option value="dry">dry</option>
+                            <option value="sticky">sticky</option>
+                            <option value="humid">humid</option>
+                            <option value="wet">wet</option>
+                            <option value="lubricated">lubricated</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="mucus">Mucus</label>            
+                    <div class="controls">
+                        <select ng-model="measurement[2][3]" id="mucus">
+                            <option value="menses">menses</option>
+                            <option value="spotting">spotting</option>
+                            <option value="sticky">sticky</option>
+                            <option value="sticky_and_creamy">sticky and creamy</option>
+                            <option value="eggwhite">eggwhite</option>
+                            <option value="nothing">nothing</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="cervix">Cervix</label>            
+                    <div class="controls">
+                        <select ng-model="measurement[2][4]" id="cervix">
+                            <option value="hard_closed_long">hard, closed and long</option>
+                            <option value="medium_short_opening">medium, shortening and opening</option>
+                            <option value="soft_short_open">soft, short and open</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="control-group">
+                    <label class="control-label" for="comment">Comment (medication etc.)</label>
+                    <div class="controls">
+                        <textarea rows="5" ng-model="measurement[2][5]"></textarea>
+                    </div>
+                </div>                    
+            </div>            
+            <div class="span5">
+                <div class="control-group">
+                    <button ng-click="saveMeasurement()" ng-disabled="form.$invalid || isUnchanged(measurement)"
+                        style="margin-top: 30px"
+                        class="btn btn-primary pull-right">Save measurement data</button> 
+                </div>
+            </div>            
+        </div>
+        
     </fieldset>
 </form>
