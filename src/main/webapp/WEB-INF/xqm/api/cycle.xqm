@@ -13,6 +13,28 @@ declare %rest:path("api/cycle/current")
         function page:current-cycle() {
     
     sec:secure(function() {
-        db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[last()]   
+        page:get-last-cycle()
     })        
+};
+
+declare %rest:path("api/cycle/add-measurement")
+        %restxq:PUT("{$data}")
+        %output:method("text")
+        %updating
+        function page:add-measurement($data) {
+
+    if (sec:is-user-logged-in()) then                
+        let $measurement := 
+            copy $m := json:parse-ml(convert:binary-to-string($data))
+            modify (
+                delete node $m/*[not(node())]
+            )                
+            return $m
+        let $c := page:get-last-cycle()
+                return insert node $measurement as last into $c
+    else ()    
+};
+
+declare %private function page:get-last-cycle() {
+    db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[last()]
 };

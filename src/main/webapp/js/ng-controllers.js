@@ -73,11 +73,19 @@ function CycleCtrl($scope, $http) {
         });
 
     $scope.saveMeasurement = function() {
-        $scope.cycle.push($.extend(true, [], $scope.measurement)); 
+        var mcopy = $.extend(true, [], $scope.measurement);
+
+        $scope.cycle.push(mcopy); 
         $scope.chart.setData([ getMeasurementsInFlotFormat($scope.cycle) ]); 
         $scope.chart.setupGrid();       
         $scope.chart.draw();
+
         // TODO: save to server
+        mcopy[1].temp = mcopy[1].temp.toString();  
+        $http.put('/app/api/cycle/add-measurement', mcopy, 
+            { headers: {'Content-Type': 'application/jsonml;charset=utf-8'} }).
+            success(function(data) {
+            });
     };
 }
 
