@@ -97,6 +97,9 @@ function getMeasurementsInFlotFormat(cycle) {
         result.push([new Date(m[1].date).getTime(), parseFloat(m[1].temp)]);        
     });
     
+    result.sort(function(a, b) {
+        return a[0] > b[0];
+    });
     return result;
 }
 
