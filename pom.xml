@@ -28,12 +28,18 @@
             <groupId>org.basex</groupId>
             <artifactId>basex-api</artifactId>
             <version>7.5-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.ettrema</groupId>
+                    <artifactId>milton-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
             <version>9.4</version>
-        </dependency>
+        </dependency>        
     </dependencies>
     <profiles>
         <profile>
