@@ -6,11 +6,13 @@
     <packaging>war</packaging>
     <version>1.0</version>
     <name>sympto</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.jboss.spec</groupId>
@@ -41,6 +43,7 @@
             <version>9.4</version>
         </dependency>        
     </dependencies>
+
     <profiles>
         <profile>
             <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
@@ -93,6 +96,30 @@
         </profile>
     </profiles>
 
+    <build>
+        <sourceDirectory>src/main/jvm</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.cloudhoist.plugin</groupId>
+                <artifactId>zi-cljs</artifactId>
+                <version>0.1.0</version>
+                <configuration>
+                    <outputDirectory>src/main/webapp/js</outputDirectory>
+                    <optimize>true</optimize>
+                    <verbose>true</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <repositories>
         <repository>
             <id>basex</id>
@@ -100,4 +127,12 @@
             <url>http://files.basex.org/maven</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-snapshots</id>
+            <url>http://oss.sonatype.org/content/repositories/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
+
