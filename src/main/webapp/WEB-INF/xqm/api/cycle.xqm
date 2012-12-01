@@ -35,6 +35,17 @@ declare %rest:path("api/cycle/add-measurement")
     else ()    
 };
 
+declare %rest:path("api/cycle/delete-measurement/{$time}")
+        %restxq:DELETE
+        %output:method("text")
+        %updating
+        function page:delete-measurement($time as xs:unsignedLong) {
+
+    if (sec:is-user-logged-in()) then                
+        delete node page:get-last-cycle()/s:measurement[@date = $time]
+    else ()    
+};
+
 declare %private function page:get-last-cycle() {
     db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[last()]
 };

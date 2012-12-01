@@ -18,8 +18,7 @@ declare %rest:path("api/user/init")
         let $profile := 
             copy $p := json:parse-ml(convert:binary-to-string($data))
             modify (
-                insert node attribute id { sec:get-current-user-id() } into $p,
-                replace value of node $p/cycle/@start with fn:substring-before($p/cycle/@start, "T")
+                insert node attribute id { sec:get-current-user-id() } into $p
             )                
             return $p
                 return insert node $profile as last into db:open("sympto")/s:sympto

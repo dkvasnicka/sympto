@@ -11,3 +11,10 @@ sympto.config(['$routeProvider', function($routeProvider) {
             
           otherwise({ redirectTo: '/' });
 }]);
+
+/**
+ * clones array
+ */
+function clonearray(a) {
+    return $.extend(true, [], a);
+}    
