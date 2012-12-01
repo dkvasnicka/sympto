@@ -1,11 +1,29 @@
-sympto.factory('Cycle', function() {
-    var Cycle = {};
-    var data = [];
+sympto.factory('Chart', function() {
+    var Chart = {};
+    
+    Chart.chart = null;
+    Chart.init = function(data) {
+        // init chart
+        this.chart = $.plot($("#chart"), [
+            { label: "Temp",  data: utils.getMeasurementsInFlotFormat(data) },
+            ], {
+            series: {
+                lines: { show: true },
+                points: { show: true }
+            },
+            xaxis	: { mode: "time", timeformat: "%d.%m.", tickSize: [1, "day"] },
+            grid	: { 
+                backgroundColor : "white",
+                clickable: true
+            } 
+        });
+    };
 
-    Cycle.getItem = function(index) { return list[i]; }
-    Cycle.addItem = function(item) { list.push(item); }
-    Cycle.removeItem = function(item) { list.splice(list.indexOf(item), 1) }
-    Cycle.size = function() { return list.length; }
+    Chart.refreshWithData = function(data) {
+        this.chart.setData([ utils.getMeasurementsInFlotFormat(data) ]); 
+        this.chart.setupGrid();       
+        this.chart.draw();
+    };        
 
-    return Cycle;
+    return Chart;
 });

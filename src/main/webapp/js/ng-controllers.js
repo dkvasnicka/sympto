@@ -10,10 +10,10 @@ function AuthCtrl($scope, $http, $location) {
         }).
         error(function(data, status) {
             if (status == 403) {
+                $location.path('/');
                 $http.get('app/auth/oauth/fb/csrf-state').success(function(data) {
                     $scope.stateHash = $.trim(data);                    
-                });
-                $location.path('/');                
+                });                                
             }
         });   
 }
@@ -34,37 +34,33 @@ function ProfileCtrl($scope, $http, $location) {
 }
 
 
-function CycleCtrl($scope, $http) {
+function CycleCtrl($scope, $http, Chart) {
 
+    // templates
     $scope.cycle = [];
-    $scope.measurement = [ "measurement", { "date" : new Date() },
+    var measurementModel = [ "measurement", { "date" : new Date(), "temp" : 0 },
                             [ "vaginal_sensation", "" ],
                             [ "mucus", "" ],
                             [ "cervix", "" ],
                             [ "comment", "" ]                            
                          ];
-    
-    $scope.chart = null;
+    /**
+     * set new m.
+     */
+    $scope.initMeasurement = function() {
+        $scope.measurement = measurementModel;
+    };    
 
+    // init
+    $scope.initMeasurement();    
+    
+    // load data
     $http.get('app/api/cycle/current').
         success(function(data) {
             $scope.cycle = data;
-
-            // init chart
-            $scope.chart = $.plot($("#chart"), [
-                { label: "Temp",  data: utils.getMeasurementsInFlotFormat($scope.cycle) },
-                ], {
-                series: {
-                    lines: { show: true },
-                    points: { show: true }
-                },
-                xaxis	: { mode: "time", timeformat: "%d.%m.", tickSize: [1, "day"] },
-				grid	: { 
-					backgroundColor : "white",
-					clickable: true
-				} 
-            });
-
+            Chart.init($scope.cycle);
+        
+            // setup point click handler
             $("#chart").bind("plotclick", function (event, pos, item) {
                 if (item) {
                     var m = utils.selectMeasurement($scope.cycle, item.datapoint[0]);
@@ -76,13 +72,14 @@ function CycleCtrl($scope, $http) {
             });
         });
 
+    /**
+     * save m.
+     */
     $scope.saveMeasurement = function() {
         var mcopy = $.extend(true, [], $scope.measurement);
 
         $scope.cycle.push(mcopy); 
-        $scope.chart.setData([ utils.getMeasurementsInFlotFormat($scope.cycle) ]); 
-        $scope.chart.setupGrid();       
-        $scope.chart.draw();
+        Chart.refreshWithData($scope.cycle);
 
         mcopy[1].temp = mcopy[1].temp.toString();  
         $http.put('/app/api/cycle/add-measurement', mcopy, 
@@ -90,4 +87,11 @@ function CycleCtrl($scope, $http) {
             success(function(data) {
             });
     };
+
+    /**
+     * if the current m. is in the cycle, it can be deleted
+     */
+    $scope.canDeleteCurrentMeasurement = function() {
+        return utils.selectMeasurement($scope.cycle, $scope.measurement[1].date.getTime()) != null;
+    };            
 }

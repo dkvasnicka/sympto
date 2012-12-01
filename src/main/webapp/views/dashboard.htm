@@ -81,9 +81,12 @@
             </div>            
             <div class="span5">
                 <div class="control-group">
+                    <button ng-click="deleteMeasurement()" ng-hide="!canDeleteCurrentMeasurement()"
+                        class="btn btn-danger pull-right dashboardFormBtn">Delete this measurement</button> 
+                    <button ng-click="initMeasurement(true)" ng-hide="!canDeleteCurrentMeasurement()"
+                        class="btn btn-success pull-right dashboardFormBtn">New measurement</button> 
                     <button ng-click="saveMeasurement()" ng-disabled="form.$invalid || isUnchanged(measurement)"
-                        style="margin-top: 30px"
-                        class="btn btn-primary pull-right">Save measurement data</button> 
+                        class="btn btn-primary pull-right dashboardFormBtn">Save measurement data</button> 
                 </div>
             </div>            
         </div>
