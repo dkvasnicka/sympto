@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" ng-app="sympto">
+<html ng-app="sympto">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Sympto</title>
@@ -27,11 +27,18 @@
 
         <link type="text/css" href="/css/angular-ui.css" rel="stylesheet" />
         <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" rel="stylesheet" />
+
+        <script type="text/javascript" src="js/goog/base.js"></script>
+        <script type="text/javascript" src="js/cljs/core.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript">goog.require('utils');</script>        
+
         <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>        
         <script type="text/javascript" src="/js/flot/jquery.flot.js"></script>        
-        <script type="text/javascript" src="/js/angular.min.js"></script>
+        <!-- <script type="text/javascript" src="/js/angular.min.js"></script>-->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>        
         <script type="text/javascript" src="/js/angular-ui.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
         <script src="http://use.edgefonts.net/source-sans-pro.js"></script>
 
         <!--[if lte IE 8]>
@@ -46,9 +53,9 @@
             <script src="/js/angular-ui-ieshiv.min.js"></script>
         <![endif]-->
         
-        <script type="text/javascript" src="/js/ngapp.js"></script>    
+        <script type="text/javascript" src="/js/ng-app.js"></script>    
         <script type="text/javascript" src="/js/ng-controllers.js"></script>    
-        <script type="text/javascript" src="/js/ng-services.js"></script>    
+        <script type="text/javascript" src="/js/ng-services.js"></script>   
     </head>
 
     <body>

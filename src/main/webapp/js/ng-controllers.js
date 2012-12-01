@@ -52,7 +52,7 @@ function CycleCtrl($scope, $http) {
 
             // init chart
             $scope.chart = $.plot($("#chart"), [
-                { label: "Temp",  data: getMeasurementsInFlotFormat($scope.cycle) },
+                { label: "Temp",  data: utils.getMeasurementsInFlotFormat($scope.cycle) },
                 ], {
                 series: {
                     lines: { show: true },
@@ -67,6 +67,7 @@ function CycleCtrl($scope, $http) {
 
             $("#chart").bind("plotclick", function (event, pos, item) {
                 if (item) {
+
                     console.log(new Date(item.datapoint[0]));                   
                 }
             });
@@ -76,11 +77,10 @@ function CycleCtrl($scope, $http) {
         var mcopy = $.extend(true, [], $scope.measurement);
 
         $scope.cycle.push(mcopy); 
-        $scope.chart.setData([ getMeasurementsInFlotFormat($scope.cycle) ]); 
+        $scope.chart.setData([ utils.getMeasurementsInFlotFormat($scope.cycle) ]); 
         $scope.chart.setupGrid();       
         $scope.chart.draw();
 
-        // TODO: save to server
         mcopy[1].temp = mcopy[1].temp.toString();  
         $http.put('/app/api/cycle/add-measurement', mcopy, 
             { headers: {'Content-Type': 'application/jsonml;charset=utf-8'} }).
@@ -88,18 +88,3 @@ function CycleCtrl($scope, $http) {
             });
     };
 }
-
-function getMeasurementsInFlotFormat(cycle) {
-
-    var result = [];
-
-    $.each(cycle.slice(2), function(idx, m) {        
-        result.push([new Date(m[1].date).getTime(), parseFloat(m[1].temp)]);        
-    });
-    
-    result.sort(function(a, b) {
-        return a[0] > b[0];
-    });
-    return result;
-}
-

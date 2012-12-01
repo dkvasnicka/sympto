@@ -4,3 +4,7 @@ target
 *.iml
 *.ipr
 *.iws
+src/main/webapp/js/goog/**
+src/main/webapp/js/cljs**
+src/main/webapp/js/sympto-*
+src/main/webapp/js/utils.js
