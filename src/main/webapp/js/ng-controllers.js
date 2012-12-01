@@ -67,8 +67,11 @@ function CycleCtrl($scope, $http) {
 
             $("#chart").bind("plotclick", function (event, pos, item) {
                 if (item) {
-
-                    console.log(new Date(item.datapoint[0]));                   
+                    var m = utils.selectMeasurement($scope.cycle, item.datapoint[0]);
+                    m[1].date = new Date(m[1].date);
+                    m[1].temp = parseFloat(m[1].temp);
+                    $scope.measurement = m;
+                    $scope.$digest();
                 }
             });
         });
