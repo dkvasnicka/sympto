@@ -12,6 +12,12 @@ declare %rest:path("api/cycle/current")
         %output:method("jsonml")
         function page:current-cycle() {
     
+    <restxq:response>
+        <http:response>
+            <http:header name="Cache-Control"   value="no-cache, no-store"/>
+            <http:header name="pragma"          value="no-cache"/>
+        </http:response>
+    </restxq:response>,            
     sec:secure(function() {
         page:get-last-cycle()
     })        
