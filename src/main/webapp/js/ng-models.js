@@ -31,6 +31,18 @@ sympto.factory('Cycle', function($rootScope, $http) {
         cycle.push(m);
     };
 
+    Cycle.deleteMeasurement = function(m) {
+        for (var i = 0; i < cycle.length; i++) {
+            var o = cycle[i];
+            if ($.isArray(o) && o[1].date.toString() == m[1].date.getTime().toString()) {
+                cycle.splice(i, 1);
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     return Cycle;
 });    
 

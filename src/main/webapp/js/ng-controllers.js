@@ -84,10 +84,11 @@ function CycleCtrl($scope, $http, Chart, Cycle) {
     $scope.deleteMeasurement = function() {
         
         if (confirm("Do you really want to delete this measurement?")) {
-            $http.delete('/app/api/cycle/delete-measurement/' + $scope.measurement[1].date.getTime().toString(), 
-                    {}, 
-                    function(data) {
-                        // remove the m. from the cycle
+            $http.delete('/app/api/cycle/delete-measurement/' + $scope.measurement[1].date.getTime().toString(), {}). 
+                    success(function(data) {
+                        Cycle.deleteMeasurement($scope.measurement);
+                        $scope.initMeasurement();
+                        Chart.refreshWithData(Cycle.getCycle());
                     });
         }
     };
