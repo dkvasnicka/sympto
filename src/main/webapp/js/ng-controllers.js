@@ -36,61 +36,46 @@ function ProfileCtrl($scope, $http, $location) {
 }
 
 
-function CycleCtrl($scope, $http, Chart) {
+function CycleCtrl($scope, $http, Chart, Cycle) {
 
-    // templates
-    $scope.cycle = [];
-    var measurementModel = [ "measurement", { "date" : new Date(), "temp" : 0.0 },
-                            [ "vaginal_sensation", "" ],
-                            [ "mucus", "" ],
-                            [ "cervix", "" ],
-                            [ "comment", "" ]                            
-                         ];
+    $scope.measurement = [];
+    
+    Cycle.init();
+
+    $scope.$on('cycleLoaded', function(event, cycle) {
+        Chart.init(cycle);
+    });
+
+
+    $scope.$on('plotClick', function(event, m) {
+        $scope.measurement = m;
+        $scope.$apply();
+    });
+   
     /**
      * set new m.
      */
     $scope.initMeasurement = function() {
-        $scope.measurement = clonearray(measurementModel);
+        $scope.measurement = Cycle.getMeasurementTemplate();
     };    
 
     // init
     $scope.initMeasurement();    
-    
-    // load data
-    $http.get('app/api/cycle/current').
-        success(function(data) {
-            $scope.cycle = data;
-            Chart.init($scope.cycle);
-        
-            // setup point click handler
-            $("#chart").bind("plotclick", function (event, pos, item) {
-                if (item) {
-                    var m = clonearray(utils.selectMeasurement($scope.cycle, item.datapoint[0].toString()));
-                    m[1].date = new Date(parseInt(m[1].date));
-                    m[1].temp = parseFloat(m[1].temp);
-                    $scope.measurement = m;
-                    $scope.$digest();
-                } else {
-                    $scope.initMeasurement();
-                }                    
-            });
-        });
 
     /**
      * save m.
      */
     $scope.saveMeasurement = function() {
         var mcopy = clonearray($scope.measurement);
+        // saving - need to discard data types and use String
         mcopy[1].date = mcopy[1].date.getTime().toString();
         mcopy[1].temp = mcopy[1].temp.toString();
 
-        $scope.cycle.push(mcopy); 
-        Chart.refreshWithData($scope.cycle);
+        Cycle.addMeasurementToCycle(mcopy);
+        Chart.refreshWithData(Cycle.getCycle());
   
-        $http.put('/app/api/cycle/add-measurement', mcopy, 
-            { headers: {'Content-Type': 'application/jsonml;charset=utf-8'} }).
-            success(function(data) {                
-            });
+        $http.put('/app/api/cycle/save-measurement', mcopy, 
+            { headers: { 'Content-Type' : 'application/jsonml;charset=utf-8' } });
     };
 
     /**
@@ -111,7 +96,7 @@ function CycleCtrl($scope, $http, Chart) {
     /**
      * if the current m. is in the cycle, it can be deleted
      */
-    $scope.canDeleteCurrentMeasurement = function() {
-        return utils.selectMeasurement($scope.cycle, $scope.measurement[1].date.getTime().toString()) != null;
+    $scope.isCurrentMeasurementInCycle = function() {
+        return utils.selectMeasurement(Cycle.getCycle(), $scope.measurement[1].date.getTime().toString()) != null;
     };            
 }

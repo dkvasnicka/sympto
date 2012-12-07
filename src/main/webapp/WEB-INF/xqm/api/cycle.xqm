@@ -23,11 +23,11 @@ declare %rest:path("api/cycle/current")
     })        
 };
 
-declare %rest:path("api/cycle/add-measurement")
+declare %rest:path("api/cycle/save-measurement")
         %restxq:PUT("{$data}")
         %output:method("text")
         %updating
-        function page:add-measurement($data) {
+        function page:save-measurement($data) {
 
     if (sec:is-user-logged-in()) then                
         let $measurement := 
