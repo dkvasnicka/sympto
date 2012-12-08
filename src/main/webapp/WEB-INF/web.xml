@@ -27,11 +27,6 @@
         <param-value>admin</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>org.basex.dbpath</param-name>
-        <param-value>/Users/daniel/BaseXData</param-value>
-    </context-param>
-
     <!--  RESTXQ Service (can be deactivated by removing this entry) -->
     <servlet>
         <servlet-name>RESTXQ</servlet-name>

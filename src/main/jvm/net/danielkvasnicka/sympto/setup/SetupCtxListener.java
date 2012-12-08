@@ -26,6 +26,7 @@ public class SetupCtxListener implements ServletContextListener {
             LOGGER.info("Production mode - BaseX dbpath: " + dbpathAbsolute);
         } else {
             LOGGER.info("Development mode - BaseX dbpath will remain unchnged.");
+            sce.getServletContext().setInitParameter("org.basex.dbpath", "/Users/daniel/BaseXData");
         }
     }
 
