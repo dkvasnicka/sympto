@@ -20,7 +20,7 @@ declare %rest:path("auth/oauth/fb/callback")
     if (session:get($page:FB_STATE_HASH_ATTR_NAME) = $state) then
         let $response := document { http:send-request(
             <http:request method="get" 
-                href="https://graph.facebook.com/oauth/access_token?client_id=108170726014554&amp;redirect_uri=http://localhost:8080/app/auth/oauth/fb/callback&amp;client_secret=e4f4ee53ef2d35281d304a942403be9f&amp;code={$code}">                
+                href="https://graph.facebook.com/oauth/access_token?client_id=108170726014554&amp;redirect_uri=http://sympto-dk.rhcloud.com/app/auth/oauth/fb/callback&amp;client_secret=e4f4ee53ef2d35281d304a942403be9f&amp;code={$code}">                
             </http:request>
         ) }
         let $token := fn:substring-before(fn:substring-after($response[1], "access_token="), "&amp;")
