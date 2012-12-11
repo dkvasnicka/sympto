@@ -27,10 +27,6 @@ sympto.factory('Cycle', function($rootScope, $http) {
         return currentMeasurementTemplate;
     };
 
-    Cycle.addMeasurementToCycle = function(m) {
-        cycle.push(m);
-    };
-
     Cycle.deleteMeasurement = function(m) {
         for (var i = 0; i < cycle.length; i++) {
             var o = cycle[i];
@@ -41,6 +37,14 @@ sympto.factory('Cycle', function($rootScope, $http) {
         }
 
         return false;
+    };
+
+    Cycle.addOrUpdateMeasurement = function(m, morig, serverCallUpdateFlag) {
+        if (serverCallUpdateFlag === "true") {
+            this.deleteMeasurement(morig);
+        }
+
+        cycle.push(m);                    
     };
 
     return Cycle;

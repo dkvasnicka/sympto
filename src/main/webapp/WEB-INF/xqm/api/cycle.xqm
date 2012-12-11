@@ -25,7 +25,7 @@ declare %rest:path("api/cycle/current")
 
 declare %rest:path("api/cycle/save-measurement")
         %restxq:PUT("{$data}")
-        %output:method("text")
+        %output:method("json")
         %updating
         function page:save-measurement($data) {
 
@@ -36,8 +36,12 @@ declare %rest:path("api/cycle/save-measurement")
                 delete node $m/*[not(node())]
             )                
             return $m
-        let $c := page:get-last-cycle()
-                return insert node $measurement as last into $c
+        let $c := page:get-last-cycle() return
+            let $existingM := $c/s:measurement[@date = $measurement/@date] return
+                if (fn:empty($existingM)) then
+                    (db:output(<json objects="json"><updated>false</updated></json>), insert node $measurement as last into $c)
+                else
+                    (db:output(<json objects="json"><updated>true</updated></json>), replace node $existingM with $measurement)
     else ()    
 };
 

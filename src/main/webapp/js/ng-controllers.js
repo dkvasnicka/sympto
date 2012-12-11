@@ -70,12 +70,13 @@ function CycleCtrl($scope, $http, Chart, Cycle) {
         // saving - need to discard data types and use String
         mcopy[1].date = mcopy[1].date.getTime().toString();
         mcopy[1].temp = mcopy[1].temp.toString();
-
-        Cycle.addMeasurementToCycle(mcopy);
-        Chart.refreshWithData(Cycle.getCycle());
   
         $http.put('/app/api/cycle/save-measurement', mcopy, 
-            { headers: { 'Content-Type' : 'application/jsonml;charset=utf-8' } });
+            { headers: { 'Content-Type' : 'application/jsonml;charset=utf-8' } }).
+            success(function(data) {
+                Cycle.addOrUpdateMeasurement(mcopy, $scope.measurement, data.updated);
+                Chart.refreshWithData(Cycle.getCycle());                
+            });
     };
 
     /**
