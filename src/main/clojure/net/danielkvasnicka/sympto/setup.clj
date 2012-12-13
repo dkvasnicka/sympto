@@ -1,5 +1,5 @@
 (ns net.danielkvasnicka.sympto.setup
-  (:require [clojure.tools.logging :refer :all])
+  (:use [clojure.tools.logging :only (info)])
   (:import (javax.servlet ServletContextListener)
            (javax.servlet.annotation WebListener)))
 

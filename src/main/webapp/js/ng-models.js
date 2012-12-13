@@ -58,7 +58,10 @@ sympto.factory('Chart', function($rootScope, Cycle) {
     Chart.init = function(data) {
         // init chart
         this.chart = $.plot($("#chart"), [
-            { label: "Temp",  data: utils.getMeasurementsInFlotFormat(data) },
+            { 
+                label: "Temp",  
+                data: utils.getMeasurementsInFlotFormat(data)
+            },
             ], {
             series: {
                 lines: { show: true },
