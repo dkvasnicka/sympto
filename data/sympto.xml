@@ -1,6 +1,6 @@
 <sympto xmlns="http://danielkvasnicka.net/sympto">
 	<profile id="daniel.kvasnicka.jr@gmail.com" temp_unit="C">
-		<cycle start="01-01-2012" end="31-01-2012">
+		<cycle start="1354389676000">
 			<measurement date="01-01-2012" sex="false" temp="36.4">
 				<vaginal_sensation>dry</vaginal_sensation>
                 <observation>spotting</observation>

@@ -21,6 +21,12 @@
                 display: block; 
                 margin: 20px;
             }    
+
+            .navbar-text select {
+                font-size: 80%;
+                height: 1.7em;
+                margin: 0 0 0 20px;
+            }
         </style>
         <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -75,7 +81,14 @@
                     <a class="brand" href="#">SymptoMeter</a>
                     <div class="nav-collapse collapse" ng-controller="AuthCtrl">
                         <p class="navbar-text pull-right">
-                        <span ng-hide="!loggedIn">{{userName}} | <a href="/app/auth/logout" class="navbar-link">Logout</a></span>
+                            <span ng-hide="!loggedIn">{{userName}} | <a href="/app/auth/logout" class="navbar-link">Logout</a> | 
+                                <a href="#/add-new-cycle" class="navbar-link">Add a new cycle</a>                            
+
+                                <select ng-controller="CycleChooserCtrl" ng-model="currentCycle" required 
+                                        ng-change="changeCycle()" ng-options="c.start as label(c) for c in cycles">
+
+                                </select>
+                            </span>
                         </p>
                         <ul class="nav" ng-hide="!loggedIn">
                             <li><a href="#/">Home</a></li>

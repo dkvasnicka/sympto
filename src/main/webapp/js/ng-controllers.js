@@ -102,3 +102,28 @@ function CycleCtrl($scope, $http, Chart, Cycle) {
         return utils.selectMeasurement(Cycle.getCycle(), $scope.measurement[1].date.getTime().toString()) != null;
     };            
 }
+
+function CycleChooserCtrl($scope, $http, $filter, Cycle) {
+
+    $scope.cycles = [];
+    $scope.currentCycle = null;
+
+    $scope.changeCycle = function() {
+        Cycle.initWith($scope.currentCycle);
+    }
+
+    $scope.$on('cycleLoaded', function(event, cycle) {
+        $scope.currentCycle = cycle[1].start;
+    });
+
+    $scope.label = function(c) {
+        return $filter('date')(c.start) + " - " + 
+            (c.end === undefined ? "..." : $filter('date')(c.end));
+    }
+
+    // init cycles
+    $http.get('app/api/cycle/all').
+        success(function(data) {
+            $scope.cycles = data;
+        });
+}    

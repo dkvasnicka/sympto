@@ -19,6 +19,14 @@ sympto.factory('Cycle', function($rootScope, $http) {
         });        
     };
     
+    Cycle.initWith = function(start) {
+        $http.get('app/api/cycle/' + start).
+        success(function(data) {
+            cycle = data;
+            $rootScope.$broadcast('cycleLoaded', cycle);
+        });        
+    };
+    
     Cycle.getCycle = function() {
         return cycle;
     };

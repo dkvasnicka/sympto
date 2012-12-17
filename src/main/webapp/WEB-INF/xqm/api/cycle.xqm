@@ -23,6 +23,40 @@ declare %rest:path("api/cycle/current")
     })        
 };
 
+declare %rest:path("api/cycle/{$start}")
+        %restxq:GET
+        %output:method("jsonml")
+        function page:cycle($start as xs:string) {
+    
+    <restxq:response>
+        <http:response>
+            <http:header name="Cache-Control"   value="no-cache, no-store"/>
+            <http:header name="pragma"          value="no-cache"/>
+        </http:response>
+    </restxq:response>,            
+    sec:secure(function() {
+        db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[@start = $start]
+    })        
+};
+
+declare %rest:path("api/cycle/all")
+        %restxq:GET
+        %output:method("json")
+        function page:all-cycles() {
+    
+    sec:secure(function() {
+        <json arrays="json" objects="cycle">
+        { 
+            for $c in db:open("sympto")/s:sympto/s:profile/s:cycle 
+            return
+                <cycle>
+                { for $a in $c/@* return element { name($a) } { string($a) } }
+                </cycle>
+        }
+        </json>
+    })        
+};
+
 declare %rest:path("api/cycle/save-measurement")
         %restxq:PUT("{$data}")
         %output:method("json")

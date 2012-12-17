@@ -17,4 +17,4 @@ sympto.config(['$routeProvider', function($routeProvider) {
  */
 function clonearray(a) {
     return $.extend(true, [], a);
-}    
+}
