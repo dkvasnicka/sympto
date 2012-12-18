@@ -9,7 +9,7 @@
         </legend>
         
         <div class="row">
-            <div class="span5">
+            <div class="span4">
                 <div class="control-group">
                     <label class="control-label" for="mdate">Date</label>            
                     <div class="controls">
@@ -24,54 +24,8 @@
                     </div>
                 </div>        
                 
-                <div class="control-group">
-                    <div class="controls">            
-                        <label class="checkbox">
-                            <input type="checkbox" ng-model="measurement[1].sex" /> Sexual intercourse
-                        </label>        
-                    </div>
-                </div>            
             </div>
-            <div class="span5">
-                <div class="control-group">
-                    <label class="control-label" for="vsens">Vaginal sens.</label>            
-                    <div class="controls">
-                        <select ng-model="measurement[2][1]" id="vsens">
-                            <option value="dry">dry</option>
-                            <option value="sticky">sticky</option>
-                            <option value="humid">humid</option>
-                            <option value="wet">wet</option>
-                            <option value="lubricated">lubricated</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="mucus">Mucus</label>            
-                    <div class="controls">
-                        <select ng-model="measurement[3][1]" id="mucus">
-                            <option value="menses">menses</option>
-                            <option value="spotting">spotting</option>
-                            <option value="sticky">sticky</option>
-                            <option value="sticky_and_creamy">sticky and creamy</option>
-                            <option value="eggwhite">eggwhite</option>
-                            <option value="nothing">nothing</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="cervix">Cervix</label>            
-                    <div class="controls">
-                        <select ng-model="measurement[4][1]" id="cervix">
-                            <option value="hard_closed_long">hard, closed and long</option>
-                            <option value="medium_short_opening">medium, shortening and opening</option>
-                            <option value="soft_short_open">soft, short and open</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="span5">
+            <div class="span4">
                 <div class="control-group">
                     <label class="control-label" for="comment">Comment (medication etc.)</label>
                     <div class="controls">
@@ -79,14 +33,14 @@
                     </div>
                 </div>                    
             </div>            
-            <div class="span5">
+            <div class="span3">
                 <div class="control-group">
                     <button ng-click="deleteMeasurement()" ng-hide="!isCurrentMeasurementInCycle()"
-                        class="btn btn-danger pull-right dashboardFormBtn">Delete this measurement</button> 
+                        class="btn btn-danger pull-right dashboardFormBtn">Delete</button> 
                     <button ng-click="initMeasurement(true)" ng-hide="!isCurrentMeasurementInCycle()"
-                        class="btn btn-success pull-right dashboardFormBtn">New measurement</button> 
+                        class="btn btn-success pull-right dashboardFormBtn">New</button> 
                     <button ng-click="saveMeasurement()" ng-disabled="form.$invalid || isUnchanged(measurement)"
-                        class="btn btn-primary pull-right dashboardFormBtn">Save measurement data</button> 
+                        class="btn btn-primary pull-right dashboardFormBtn">Save</button> 
                 </div>
             </div>            
         </div>
