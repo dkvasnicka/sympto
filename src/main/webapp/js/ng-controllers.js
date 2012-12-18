@@ -35,6 +35,18 @@ function ProfileCtrl($scope, $http, $location) {
     };
 }
 
+function NewCycleCtrl($scope, $http, $location) {
+
+    $scope.save = function() {
+        $http.put('/app/api/cycle/new/' + $scope.start.getTime().toString(), 
+            {}).
+            success(function(data) {
+                
+                $location.path('/dashboard');
+            });
+    }        
+
+}    
 
 function CycleCtrl($scope, $http, Chart, Cycle) {
 
@@ -67,7 +79,7 @@ function CycleCtrl($scope, $http, Chart, Cycle) {
      */
     $scope.saveMeasurement = function() {
         var mcopy = clonearray($scope.measurement);
-        // saving - need to discard data types and use String
+        // grrrrrrr - need to discard data types and use String
         mcopy[1].date = mcopy[1].date.getTime().toString();
         mcopy[1].temp = mcopy[1].temp.toString();
   

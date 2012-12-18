@@ -1,0 +1,12 @@
+<h2>New cycle</h2>
+
+<form ng-controller="NewCycleCtrl">
+
+    <fieldset>
+        
+        <label for="cstart">First day of the cycle</label>
+        <input type="text" ng-model="start" required ui-date />
+    </fieldset>
+
+    <button ng-click="save()" class="btn btn-primary">Create</button>
+</form>

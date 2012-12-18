@@ -5,9 +5,10 @@ sympto.value('ui.config', {});
 sympto.config(['$routeProvider', function($routeProvider) {
       $routeProvider.
           
-          when('/',             { templateUrl: 'views/home.htm' }).
-          when('/dashboard',    { templateUrl: 'views/dashboard.htm' }).
-          when('/new-user',     { templateUrl: 'views/new-user.htm' }).
+          when('/',                 { templateUrl: 'views/home.htm' }).
+          when('/dashboard',        { templateUrl: 'views/dashboard.htm' }).
+          when('/new-user',         { templateUrl: 'views/new-user.htm' }).
+          when('/add-new-cycle',    { templateUrl: 'views/add-new-cycle.htm' }).
             
           otherwise({ redirectTo: '/' });
 }]);
