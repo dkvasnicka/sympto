@@ -40,9 +40,13 @@ function NewCycleCtrl($scope, $http, $location) {
     $scope.save = function() {
         $http.put('/app/api/cycle/new/' + $scope.start.getTime().toString(), 
             {}).
-            success(function(data) {
-                
+            success(function(data) {                
                 $location.path('/dashboard');
+            }).
+            error(function(data, status) {
+                if (status == 500) {
+                    alert(data);
+                }
             });
     }        
 

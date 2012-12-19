@@ -7,6 +7,8 @@ declare namespace s = "http://danielkvasnicka.net/sympto";
 import module namespace sec = 'http://danielkvasnicka.net/sympto/secure' at "../../xqlib/security.xqm";
 import module namespace session = 'http://basex.org/modules/session';
 
+
+
 declare %rest:path("api/cycle/current")
         %restxq:GET
         %output:method("jsonml")
@@ -47,7 +49,8 @@ declare %rest:path("api/cycle/all")
     sec:secure(function() {
         <json arrays="json" objects="cycle">
         { 
-            for $c in db:open("sympto")/s:sympto/s:profile/s:cycle 
+            for $c in db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle
+            order by $c/@start
             return
                 <cycle>
                 { for $a in $c/@* return element { name($a) } { string($a) } }
@@ -76,7 +79,26 @@ declare %rest:path("api/cycle/save-measurement")
                     (db:output(<json objects="json"><updated>false</updated></json>), insert node $measurement as last into $c)
                 else
                     (db:output(<json objects="json"><updated>true</updated></json>), replace node $existingM with $measurement)
-    else ()    
+    else db:output($sec:UNAUTHORIZED)    
+};
+
+declare %rest:path("api/cycle/new/{$start}")
+        %restxq:PUT
+        %updating
+        function page:new-cycle($start as xs:integer) {
+
+    if (sec:is-user-logged-in()) then                
+        if (fn:empty(page:find-overlapping-cycle($start))) then
+            insert node 
+                <cycle start="{$start}" />
+            as last into db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]    
+        else db:output(
+            <restxq:response>
+                <http:response status="500" 
+                    message="The selected date overlaps with an existing cycle! Select a different date and try again." />
+            </restxq:response>)
+
+    else db:output($sec:UNAUTHORIZED)    
 };
 
 declare %rest:path("api/cycle/delete-measurement/{$time}")
@@ -87,8 +109,15 @@ declare %rest:path("api/cycle/delete-measurement/{$time}")
 
     if (sec:is-user-logged-in()) then                
         delete node page:get-last-cycle()/s:measurement[@date = $time]
-    else ()    
+    else db:output($sec:UNAUTHORIZED)    
 };
+
+(: --------- private functions :)
+
+declare %private function page:find-overlapping-cycle($start as xs:integer) {
+    db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[
+        $start ge xs:integer(@start) and $start le xs:integer(@end)]
+};    
 
 declare %private function page:get-last-cycle() {
     db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[last()]

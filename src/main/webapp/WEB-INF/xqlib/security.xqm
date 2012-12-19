@@ -5,6 +5,10 @@ import module namespace session = 'http://basex.org/modules/session';
 
 declare %public variable $secure:USER_EMAIL_ATTR_NAME := "userId";
 declare %public variable $secure:USER_NAME_ATTR_NAME := "userName";
+declare %public variable $secure:UNAUTHORIZED :=    <restxq:response>
+                                                        <http:response status="403" />
+                                                    </restxq:response>;
+
 
 declare function secure:secure($fun) {
     
