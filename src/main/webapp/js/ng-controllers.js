@@ -7,15 +7,13 @@ function AuthCtrl($scope, $http, $location) {
             $scope.userName = $.trim(data);
             $("#socialLogin").hide();
             $scope.loggedIn = true;
-        }).
-        error(function(data, status) {
-            if (status == 403) {
-                $location.path('/');
-                $http.get('app/auth/oauth/fb/csrf-state').success(function(data) {
-                    $scope.stateHash = $.trim(data);                    
-                });                                
-            }
-        });   
+        });
+
+    $scope.$on('403', function(event) {
+        $http.get('app/auth/oauth/fb/csrf-state').success(function(data) {
+            $scope.stateHash = $.trim(data);                    
+        });
+    });   
 }
 
 function ProfileCtrl($scope, $http, $location) {
@@ -42,11 +40,6 @@ function NewCycleCtrl($scope, $http, $location) {
             {}).
             success(function(data) {                
                 $location.path('/dashboard');
-            }).
-            error(function(data, status) {
-                if (status == 500) {
-                    alert(data);
-                }
             });
     }        
 
