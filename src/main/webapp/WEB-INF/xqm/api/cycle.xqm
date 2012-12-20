@@ -5,9 +5,10 @@ declare namespace convert = 'http://basex.org/modules/convert';
 declare namespace s = "http://danielkvasnicka.net/sympto";
 
 import module namespace sec = 'http://danielkvasnicka.net/sympto/secure' at "../../xqlib/security.xqm";
+import module namespace fx = 'http://www.functx.com' at "../../xqlib/functx-1.0-nodoc-2007-01.xqm";
 import module namespace session = 'http://basex.org/modules/session';
 
-
+declare %public variable $page:CYCLE_START_ATTR := "activeCycle";
 
 declare %rest:path("api/cycle/current")
         %restxq:GET
@@ -21,7 +22,16 @@ declare %rest:path("api/cycle/current")
         </http:response>
     </restxq:response>,            
     sec:secure(function() {
-        page:get-last-cycle()
+        page:get-active-cycle()
+    })        
+};
+
+declare %rest:path("api/cycle/current")
+        %restxq:PUT("{$data}")
+        function page:set-current-cycle($data) {
+             
+    sec:secure(function() {
+        session:set($page:CYCLE_START_ATTR, fx:trim($data))
     })        
 };
 
@@ -37,7 +47,7 @@ declare %rest:path("api/cycle/{$start}")
         </http:response>
     </restxq:response>,            
     sec:secure(function() {
-        db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[@start = $start]
+        sec:get-current-profile()/s:cycle[@start = $start]
     })        
 };
 
@@ -49,7 +59,7 @@ declare %rest:path("api/cycle/all")
     sec:secure(function() {
         <json arrays="json" objects="cycle">
         { 
-            for $c in db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle
+            for $c in sec:get-current-profile()/s:cycle
             order by $c/@start
             return
                 <cycle>
@@ -73,7 +83,7 @@ declare %rest:path("api/cycle/save-measurement")
                 delete node $m/*[not(node())]
             )                
             return $m
-        let $c := page:get-last-cycle() return
+        let $c := page:get-active-cycle() return
             let $existingM := $c/s:measurement[@date = $measurement/@date] return
                 if (fn:empty($existingM)) then
                     (db:output(<json objects="json"><updated>false</updated></json>), insert node $measurement as last into $c)
@@ -91,7 +101,7 @@ declare %rest:path("api/cycle/new/{$start}")
         if (fn:empty(page:find-overlapping-cycle($start))) then
             insert node 
                 <cycle start="{$start}" />
-            as last into db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]    
+            as last into sec:get-current-profile()    
         else db:output(
             <restxq:response>
                 <http:response status="500" 
@@ -108,17 +118,28 @@ declare %rest:path("api/cycle/delete-measurement/{$time}")
         function page:delete-measurement($time as xs:unsignedLong) {
 
     if (sec:is-user-logged-in()) then                
-        delete node page:get-last-cycle()/s:measurement[@date = $time]
+        delete node page:get-active-cycle()/s:measurement[@date = $time]
     else db:output($sec:UNAUTHORIZED)    
 };
 
 (: --------- private functions :)
 
 declare %private function page:find-overlapping-cycle($start as xs:integer) {
-    db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[
+    sec:get-current-profile()/s:cycle[
         $start ge xs:integer(@start) and $start le xs:integer(@end)]
 };    
 
+declare %private function page:get-active-cycle() {
+    let $acStart := session:get($page:CYCLE_START_ATTR) return
+        if (fn:not(fn:empty($acStart))) then
+            sec:get-current-profile()/s:cycle[@start = $acStart]
+        else
+            let $newActiveCycle := page:get-last-cycle() return
+                (session:set($page:CYCLE_START_ATTR, $newActiveCycle/@start),
+                $newActiveCycle)
+                
+};    
+
 declare %private function page:get-last-cycle() {
-    db:open("sympto")/s:sympto/s:profile[@id = sec:get-current-user-id()]/s:cycle[last()]
+    sec:get-current-profile()/s:cycle[last()]
 };

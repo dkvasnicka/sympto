@@ -125,7 +125,14 @@ function CycleChooserCtrl($scope, $http, $filter, Cycle) {
     $scope.currentCycle = null;
 
     $scope.changeCycle = function() {
-        Cycle.initWith($scope.currentCycle);
+        
+        // set session attr
+        $http.put('/app/api/cycle/current', $scope.currentCycle, 
+            { headers: { 'Content-Type' : 'text/plain;charset=utf-8' } }).
+            success(function(data) {
+                // init
+                Cycle.init();  
+            });
     }
 
     $scope.$on('cycleLoaded', function(event, cycle) {
