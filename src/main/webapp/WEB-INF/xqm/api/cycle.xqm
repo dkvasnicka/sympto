@@ -83,12 +83,21 @@ declare %rest:path("api/cycle/save-measurement")
                 delete node $m/*[not(node())]
             )                
             return $m
-        let $c := page:get-active-cycle() return
-            let $existingM := $c/s:measurement[@date = $measurement/@date] return
-                if (fn:empty($existingM)) then
-                    (db:output(<json objects="json"><updated>false</updated></json>), insert node $measurement as last into $c)
-                else
-                    (db:output(<json objects="json"><updated>true</updated></json>), replace node $existingM with $measurement)
+        let $c := page:get-active-cycle() 
+        let $mdate := xs:integer($measurement/@date) return
+            if ($mdate ge xs:integer($c/@start) and ($mdate le xs:integer($c/@end) or fn:empty($c/@end))) 
+                then
+                let $existingM := $c/s:measurement[@date = $measurement/@date] return
+                    if (fn:empty($existingM)) then
+                        (db:output(<json objects="json"><updated>false</updated></json>), insert node $measurement as last into $c)
+                    else
+                        (db:output(<json objects="json"><updated>true</updated></json>), replace node $existingM with $measurement)
+            else
+                db:output(
+                    <restxq:response>
+                        <http:response status="500" 
+                            message="The selected date does not belong to the current cycle!" />
+                    </restxq:response>)
     else db:output($sec:UNAUTHORIZED)    
 };
 
