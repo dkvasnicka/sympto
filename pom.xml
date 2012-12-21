@@ -24,12 +24,12 @@
         <dependency>
             <groupId>org.basex</groupId>
             <artifactId>basex</artifactId>
-            <version>7.5-SNAPSHOT</version>
+            <version>7.5</version>
         </dependency>
         <dependency>
             <groupId>org.basex</groupId>
             <artifactId>basex-api</artifactId>
-            <version>7.5-SNAPSHOT</version>
+            <version>7.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.ettrema</groupId>
