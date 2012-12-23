@@ -20,14 +20,15 @@
 
         ; continue searching...
         (if
-          (let [lfts (lefts l)
-                precSix (nthrest lfts (- (count lfts) 6))
-                precSixMax (reduce max precSix)]
+          (let [lfts        (lefts l)
+                precSix     (nthrest lfts (- (count lfts) 6))
+                precSixMax  (reduce max precSix)]
             (and
               ; 6 prec. s. are lower
               (every? true? (map #(< % (node l)) precSix))
               ; the 2 right siblings are at least 0.2 higher than max(prec6)
-              (every? true? (map #(>= (- (bigdec %) (bigdec precSixMax)) 0.2)
+              ; dirty hack to make Clojure float compath with ClojureScript
+              (every? true? (map #(>= (- % precSixMax) 0.19999)
                               (take 2 (rights l))))))
           ; return the position...
           (count (lefts l))
