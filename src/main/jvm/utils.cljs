@@ -1,4 +1,5 @@
-(ns utils)
+(ns utils
+  (:use [sympto.core :as c]))
 
 (defn ^:export getMeasurementsInFlotFormat
     "Converts cycle JsonML to array suitable for Flot"

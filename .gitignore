@@ -9,3 +9,4 @@ src/main/webapp/js/cljs**
 src/main/webapp/js/sympto-*
 src/main/webapp/js/utils.js
 src/main/webapp/data/**
+src/main/webapp/js/sympto.js
