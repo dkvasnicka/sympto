@@ -64,31 +64,45 @@ sympto.factory('Chart', function($rootScope, Cycle) {
     
     Chart.chart = null;
     Chart.init = function(data) {
+
         // init chart
-        this.chart = $.plot($("#chart"), [
-            { 
-                label: "Temp",  
-                data: utils.getMeasurementsInFlotFormat(data)
-            },
-            ], {
-            series: {
-                lines: { show: true },
-                points: { show: true }
-            },
-            xaxis	: { mode: "time", timeformat: "%d.%m.", tickSize: [1, "day"] },
-            grid	: { 
-                backgroundColor : "white",
-                clickable: true
-            } 
-        });
+        this.chart = $.plot($("#chart"), prepareChartData(data), {
+                series: {
+                    lines: { show: true },
+                    points: { show: true }
+                },
+                xaxis	: { mode: "time", timeformat: "%d.%m.", tickSize: [1, "day"] },
+                grid	: { 
+                    backgroundColor : "white",
+                    clickable: true
+                } 
+            }
+        );
     };
 
     Chart.refreshWithData = function(data) {
-        this.chart.setData([ utils.getMeasurementsInFlotFormat(data) ]); 
+        this.chart.setData(prepareChartData(data)); 
         this.chart.setupGrid();       
         this.chart.draw();
     };       
 
+    var prepareChartData = function(data) {
+        var flotFormattedData = utils.getMeasurementsInFlotFormat(data);
+        var infertileBeginningIndex = cljsympto.core.detectInfertilePeriod(flotFormattedData);
+        var infertileData = infertileBeginningIndex == -1 ? [] : flotFormattedData.slice(infertileBeginningIndex);
+        var fertileData = infertileBeginningIndex == -1 ? flotFormattedData : flotFormattedData.slice(0, infertileBeginningIndex + 1);
+
+        return [
+            { 
+                label: "Fertile",  
+                data: fertileData
+            },
+            { 
+                label: "Infertile",  
+                data: infertileData
+            }            
+        ];
+    };    
         
     // setup point click handler
     $("#chart").bind("plotclick", function (event, pos, item) {
