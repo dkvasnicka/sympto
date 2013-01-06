@@ -1,5 +1,6 @@
-// Cycle model
-sympto.factory('Cycle', function($rootScope, $http) {
+var backend = angular.module('backend', []);
+
+backend.service('Cycle', function($rootScope, $http) {
     
     var Cycle = {};
     var currentMeasurementTemplate = [ "measurement", { "date" : new Date(), "temp" : 0.0 },
@@ -58,8 +59,7 @@ sympto.factory('Cycle', function($rootScope, $http) {
     return Cycle;
 });    
 
-// Chart model
-sympto.factory('Chart', function($rootScope, Cycle) {
+backend.service('Chart', function($rootScope, Cycle) {
     var Chart = {};
     
     Chart.chart = null;
@@ -86,7 +86,8 @@ sympto.factory('Chart', function($rootScope, Cycle) {
         this.chart.draw();
     };       
 
-    var prepareChartData = function(data) {
+    // prepares the chart data
+    /* private */ function prepareChartData(data) {
         var flotFormattedData = utils.getMeasurementsInFlotFormat(data);
         var infertileBeginningIndex = cljsympto.core.detectInfertilePeriod(flotFormattedData);
         var infertileData = infertileBeginningIndex == -1 ? [] : flotFormattedData.slice(infertileBeginningIndex);

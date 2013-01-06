@@ -1,5 +1,5 @@
 // boot
-var sympto = angular.module('sympto', ['ui.directives']);
+var sympto = angular.module('sympto', [ 'ui.directives', 'controllers' ]);
 sympto.value('ui.config', {});
 
 // routing

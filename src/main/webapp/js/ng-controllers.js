@@ -1,4 +1,6 @@
-function AuthCtrl($scope, $http, $location) {
+var controllers = angular.module('controllers', [ 'backend' ]);
+
+controllers.controller('AuthCtrl', function($scope, $http, $location) {
 
     $scope.loggedIn = false;
 
@@ -14,9 +16,9 @@ function AuthCtrl($scope, $http, $location) {
             $scope.stateHash = $.trim(data);                    
         });
     });   
-}
+});
 
-function ProfileCtrl($scope, $http, $location) {
+controllers.controller('ProfileCtrl', function($scope, $http, $location) {
     
     $scope.newProfile = ["profile", {},
                             ["cycle", { "start" : new Date() }]]; 
@@ -31,9 +33,9 @@ function ProfileCtrl($scope, $http, $location) {
                 $location.path('/dashboard');
             });            
     };
-}
+});
 
-function NewCycleCtrl($scope, $http, $location) {
+controllers.controller("NewCycleCtrl", function($scope, $http, $location) {
 
     $scope.save = function() {
         $http.put('/app/api/cycle/new/' + $scope.start.getTime().toString(), 
@@ -43,9 +45,9 @@ function NewCycleCtrl($scope, $http, $location) {
             });
     }        
 
-}    
+});    
 
-function CycleCtrl($scope, $http, Chart, Cycle) {
+controllers.controller("CycleCtrl", function($scope, $http, Chart, Cycle) {
 
     $scope.measurement = [];
     
@@ -110,9 +112,9 @@ function CycleCtrl($scope, $http, Chart, Cycle) {
     $scope.isCurrentMeasurementInCycle = function() {
         return utils.selectMeasurement(Cycle.getCycle(), $scope.measurement[1].date.getTime().toString()) != null;
     };            
-}
+});
 
-function CycleChooserCtrl($scope, $http, $filter, Cycle) {
+controllers.controller("CycleChooserCtrl", function($scope, $http, $filter, Cycle) {
 
     $scope.cycles = [];
     $scope.currentCycle = null;
@@ -142,4 +144,4 @@ function CycleChooserCtrl($scope, $http, $filter, Cycle) {
         success(function(data) {
             $scope.cycles = data;
         });
-}    
+});    
