@@ -45,18 +45,18 @@
       )))
 
 ; --------------- TESTS
-(deftest testDetectInfertilePeriod
-    (is (= 6 (detectInfertilePeriod
-               [[0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.8] [0 36.8]])))
-
-    (is (= 7 (detectInfertilePeriod
-               [[0 37] [0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.8] [0 36.8]])))
-
-    (is (= 7 (detectInfertilePeriod
-               [[0 37] [0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.6] [0 36.8]])))
-
-    (is (= -1 (detectInfertilePeriod
-              [[0 35] [0 36]]))))
-
-
-(run-tests 'cljsympto.core)
+;(deftest testDetectInfertilePeriod
+;    (is (= 6 (detectInfertilePeriod
+;               [[0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.8] [0 36.8]])))
+;
+;    (is (= 7 (detectInfertilePeriod
+;               [[0 37] [0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.8] [0 36.8]])))
+;
+;    (is (= 7 (detectInfertilePeriod
+;               [[0 37] [0 36.5] [0 36.3] [0 36.5] [0 36.4] [0 36.6] [0 36.5] [0 36.7] [0 36.6] [0 36.8]])))
+;
+;    (is (= -1 (detectInfertilePeriod
+;              [[0 35] [0 36]]))))
+;
+;
+;(run-tests 'cljsympto.core)
