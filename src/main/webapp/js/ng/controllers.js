@@ -1,21 +1,20 @@
-var controllers = angular.module('controllers', [ 'backend' ]);
+var controllers = angular.module('controllers', [ 'backend', 'restResources' ]);
 
-controllers.controller('AuthCtrl', function($scope, $http, $location) {
-
+controllers.controller('AuthCtrl', function($scope, $http, $location, UserName, CSRFToken) {
+    
     $scope.loggedIn = false;
 
-    $http.get('app/auth/user-name').
-        success(function(data) {
-            $scope.userName = $.trim(data);
-            $("#socialLogin").hide();
-            $scope.loggedIn = true;
-        });
-
     $scope.$on('403', function(event) {
-        $http.get('app/auth/oauth/fb/csrf-state').success(function(data) {
-            $scope.stateHash = $.trim(data);                    
+        var csrfObject = CSRFToken.get({}, function() {
+            $scope.stateHash = $.trim(csrfObject.state);                    
         });
     });   
+
+    var user = UserName.get({}, function() {
+        $("#socialLogin").hide();
+        $scope.loggedIn = true;
+        $scope.userName = user.name;        
+    });
 });
 
 controllers.controller('ProfileCtrl', function($scope, $http, $location) {

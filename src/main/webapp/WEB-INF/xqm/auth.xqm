@@ -46,18 +46,20 @@ declare %rest:path("auth/oauth/fb/callback")
         <rest:redirect>/</rest:redirect>
 };
 
-declare %rest:path("auth/oauth/fb/csrf-state")
-        %output:method("text")
+declare %rest:path("auth/oauth/fb/csrf")
+        %output:method("json")
         function page:fb-csrf-state() {
     
     let $state := hash:md5(random:integer() cast as xs:string)
     return
-        (session:set($page:FB_STATE_HASH_ATTR_NAME, $state cast as xs:string), fn:encode-for-uri($state cast as xs:string))
-    
+        (session:set($page:FB_STATE_HASH_ATTR_NAME, $state cast as xs:string), 
+        <json objects="json">
+            <state>{fn:encode-for-uri($state cast as xs:string)}</state>
+        </json>)
 };
 
-declare %rest:path("auth/user-name")
-        %output:method("text")
+declare %rest:path("auth/user")
+        %output:method("json")
         function page:user-name() {
 
     let $userName := session:get($sec:USER_NAME_ATTR_NAME)
@@ -67,7 +69,9 @@ declare %rest:path("auth/user-name")
                 <http:response status="403" message="No user" />
             </restxq:response>
         else
-            $userName
+            <json objects="json">
+                {$userName}
+            </json>
 };            
 
 declare %rest:path("auth/logout")
