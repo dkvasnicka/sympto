@@ -16,7 +16,8 @@ declare %rest:path("auth/oauth/fb/callback")
         %restxq:query-param("state", "{$state}")
         %restxq:query-param("code", "{$code}")   
         function page:fb-oauth-callback($state, $code as xs:string) {
-   
+
+    (: The FB client secret has been changed... don't even try it :)            
     let $response := http:send-request(
         <http:request method="get" 
             href="https://graph.facebook.com/oauth/access_token?client_id=108170726014554&amp;redirect_uri=http://localhost:8080/app/auth/oauth/fb/callback&amp;client_secret=e4f4ee53ef2d35281d304a942403be9f&amp;code={$code}">                
