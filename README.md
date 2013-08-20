@@ -11,4 +11,6 @@ The app allows you to track daily temperature and automatically detects the corr
 
 The app is written using a pretty exotic mashup of technologies (self-study FTW!): embedded native XML database BaseX running inside of a Java EE 6 app and serving REST endpoints written in XQuery (RESTXQ). There is a bit of Clojure on the server side as well and the client side is written using JavaScript, AngularJS and ClojureScript.
 
+Never tested in Internet Explorer.
+
 © 2012, 2013 Daniel Kvasnicka. Released under BSD 3-clause license.
