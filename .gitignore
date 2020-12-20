@@ -11,3 +11,7 @@ src/main/webapp/js/utils.js
 src/main/webapp/data/**
 src/main/webapp/js/sympto.js
 src/main/webapp/js/zip.js
+tags
+.project
+.classpath
+.settings
